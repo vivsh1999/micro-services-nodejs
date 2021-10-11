@@ -1,0 +1,52 @@
+# Reverse Proxy
+version: "3"
+
+services:
+    # nginx:
+    #     build: ./nginx
+    #     links:
+    #         - microservice1:microservice1
+    #         - microservice2:microservice2
+    #         - microservice3:microservice3
+    #     ports:
+    #         - "80:80"
+    
+    gateway:
+        build: ./api-gateway
+        links:
+            - microservice1:microservice1
+            - microservice2:microservice2
+            - microservice3:microservice3
+        environment:
+            SERVICE1: microservice1
+            SERVICE2: microservice2
+            SERVICE3: microservice3
+        ports:
+            - "80:80"
+
+    microservice1:
+        build: ./services/App1
+        ports:
+            - "9001:9000"
+        environment:
+            NODE_ENV: production
+            IP: 0.0.0.0
+            PORT: 9000
+
+    microservice2:
+        build: ./services/App2
+        ports:
+            - "9002:9000"
+        environment:
+            NODE_ENV: production
+            IP: 0.0.0.0
+            PORT: 9000
+
+    microservice3:
+        build: ./services/App3
+        ports:
+            - "9003:9000"
+        environment:
+            NODE_ENV: production
+            IP: 0.0.0.0
+            PORT: 9000
