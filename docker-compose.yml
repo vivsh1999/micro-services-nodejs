@@ -18,11 +18,12 @@ services:
             - microservice2:microservice2
             - microservice3:microservice3
         environment:
-            SERVICE1: microservice1
-            SERVICE2: microservice2
-            SERVICE3: microservice3
+            PORT: 8080
+            SERVICE1_PORT: 9000
+            SERVICE2_PORT: 9000
+            SERVICE3_PORT: 9000
         ports:
-            - "80:80"
+            - "8080:8080"
 
     microservice1:
         build: ./services/App1
@@ -30,7 +31,7 @@ services:
             - "9001:9000"
         environment:
             NODE_ENV: production
-            IP: 0.0.0.0
+            IP: 127.0.0.1
             PORT: 9000
 
     microservice2:
@@ -39,7 +40,7 @@ services:
             - "9002:9000"
         environment:
             NODE_ENV: production
-            IP: 0.0.0.0
+            IP: 127.0.0.1
             PORT: 9000
 
     microservice3:
@@ -48,5 +49,5 @@ services:
             - "9003:9000"
         environment:
             NODE_ENV: production
-            IP: 0.0.0.0
+            IP: 127.0.0.1
             PORT: 9000
