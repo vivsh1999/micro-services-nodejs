@@ -1,16 +1,6 @@
-# Reverse Proxy
 version: "3"
 
 services:
-    # nginx:
-    #     build: ./nginx
-    #     links:
-    #         - microservice1:microservice1
-    #         - microservice2:microservice2
-    #         - microservice3:microservice3
-    #     ports:
-    #         - "80:80"
-    
     gateway:
         build: ./api-gateway
         links:

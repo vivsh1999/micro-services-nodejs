@@ -19,8 +19,6 @@ RUN npm install
 WORKDIR /src
 ADD . /src
 
-# Expose port
-EXPOSE  8888
 
 # Run app using pm2
 CMD ["npm", "start"]
