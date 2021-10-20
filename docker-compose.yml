@@ -41,3 +41,32 @@ services:
             NODE_ENV: production
             IP: 127.0.0.1
             PORT: 9000
+    netdata:
+        image: netdata/netdata
+        container_name: netdata
+        hostname: example.com # set to fqdn of host
+        ports:
+            - 19999:19999
+        restart: unless-stopped
+        cap_add:
+            - SYS_PTRACE
+        security_opt:
+            - apparmor:unconfined
+        volumes:
+            - netdataconfig:/etc/netdata
+            - netdatalib:/var/lib/netdata
+            - netdatacache:/var/cache/netdata
+            - /etc/passwd:/host/etc/passwd:ro
+            - /etc/group:/host/etc/group:ro
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /etc/os-release:/host/etc/os-release:ro
+        environment:
+            - NETDATA_CLAIM_TOKEN=ulk3Vzte4-pN_mbrKUAurdiJOUxXXgaIHf7hH6xUr_vqOWtupaIuwLqax5QI_mGu644n_vUn-0-snycLp41rIqK8dGgHR4SNmKDyR9ixrVracoIeUOjVXxEnOpBVtP79uPFHVcU
+            - NETDATA_CLAIM_URL=https://app.netdata.cloud
+            - NETDATA_CLAIM_ROOMS=e81d1009-b47f-42cf-8e7b-f23435c5b342
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:

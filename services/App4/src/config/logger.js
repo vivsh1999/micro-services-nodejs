@@ -20,6 +20,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       stderrLevels: ['error'],
     }),
+    //add mongodb transport here
   ],
 });
 
