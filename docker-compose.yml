@@ -1,16 +1,6 @@
-# Reverse Proxy
 version: "3"
 
 services:
-    # nginx:
-    #     build: ./nginx
-    #     links:
-    #         - microservice1:microservice1
-    #         - microservice2:microservice2
-    #         - microservice3:microservice3
-    #     ports:
-    #         - "80:80"
-    
     gateway:
         build: ./api-gateway
         links:
@@ -18,11 +8,12 @@ services:
             - microservice2:microservice2
             - microservice3:microservice3
         environment:
-            SERVICE1: microservice1
-            SERVICE2: microservice2
-            SERVICE3: microservice3
+            PORT: 8080
+            SERVICE1_PORT: 9000
+            SERVICE2_PORT: 9000
+            SERVICE3_PORT: 9000
         ports:
-            - "80:80"
+            - "8080:8080"
 
     microservice1:
         build: ./services/App1
@@ -30,7 +21,7 @@ services:
             - "9001:9000"
         environment:
             NODE_ENV: production
-            IP: 0.0.0.0
+            IP: 127.0.0.1
             PORT: 9000
 
     microservice2:
@@ -39,7 +30,7 @@ services:
             - "9002:9000"
         environment:
             NODE_ENV: production
-            IP: 0.0.0.0
+            IP: 127.0.0.1
             PORT: 9000
 
     microservice3:
@@ -48,5 +39,34 @@ services:
             - "9003:9000"
         environment:
             NODE_ENV: production
-            IP: 0.0.0.0
+            IP: 127.0.0.1
             PORT: 9000
+    netdata:
+        image: netdata/netdata
+        container_name: netdata
+        hostname: example.com # set to fqdn of host
+        ports:
+            - 19999:19999
+        restart: unless-stopped
+        cap_add:
+            - SYS_PTRACE
+        security_opt:
+            - apparmor:unconfined
+        volumes:
+            - netdataconfig:/etc/netdata
+            - netdatalib:/var/lib/netdata
+            - netdatacache:/var/cache/netdata
+            - /etc/passwd:/host/etc/passwd:ro
+            - /etc/group:/host/etc/group:ro
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /etc/os-release:/host/etc/os-release:ro
+        environment:
+            - NETDATA_CLAIM_TOKEN=ulk3Vzte4-pN_mbrKUAurdiJOUxXXgaIHf7hH6xUr_vqOWtupaIuwLqax5QI_mGu644n_vUn-0-snycLp41rIqK8dGgHR4SNmKDyR9ixrVracoIeUOjVXxEnOpBVtP79uPFHVcU
+            - NETDATA_CLAIM_URL=https://app.netdata.cloud
+            - NETDATA_CLAIM_ROOMS=e81d1009-b47f-42cf-8e7b-f23435c5b342
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
